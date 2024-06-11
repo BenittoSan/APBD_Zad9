@@ -38,10 +38,10 @@ public class PrescriptionService : IPrescriptionService
                     });
             }
 
-            var prescription =
+            var medicamentAsync =
                 await _medicamentRepository.GetMedicamentAsync(addPrescritionToPatienDto.medicament.idMedicament);
 
-            if (prescription == null)
+            if (medicamentAsync == null)
             {
                 throw new DomainException($"Medicament with id {addPrescritionToPatienDto.medicament.idMedicament}" +
                                           $"dose not exist");
@@ -51,7 +51,7 @@ public class PrescriptionService : IPrescriptionService
                 .GetCountMedicamentInPrescription(addPrescritionToPatienDto.prescription.idPrescription);
 
             int maxMedicaments = 10;
-            if (numerOfMedicament <= maxMedicaments)
+            if (numerOfMedicament >= maxMedicaments)
             {
                 throw new DataException($"Prescription can not have more than {maxMedicaments} medicaments");
             }
@@ -60,8 +60,21 @@ public class PrescriptionService : IPrescriptionService
             {
                 throw new DataException("Error Date");
             }
-            // 1) funkcja createPrescription
-            // 2) 
+
+            Prescription prescription = new Prescription
+            {
+                Date = addPrescritionToPatienDto.prescription.Date,
+                DueDate = addPrescritionToPatienDto.prescription.DueDate,
+                IdPatient = addPrescritionToPatienDto.patient.idPatient,
+                IdDoctor = addPrescritionToPatienDto.doctor.IdDoctor
+            };
+
+            var newPrescription = await _prescriptionRepository.CreatePrescription(prescription);
+
+            PrescriptionDTO responsePrescription = addPrescritionToPatienDto.prescription;
+
+            return responsePrescription;
+            
 
         }
         catch (ArgumentNullException e)

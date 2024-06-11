@@ -1,6 +1,6 @@
-namespace CodeFirst.DTOs.Request;
+namespace CodeFirst.DTOs.Response;
 
-public class DoctorDTO
+public class PatientInfoDoctorDTO
 {
     public int IdDoctor { get; set; }
     public string FirstName { get; set; }

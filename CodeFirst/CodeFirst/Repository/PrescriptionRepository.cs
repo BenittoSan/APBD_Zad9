@@ -43,6 +43,6 @@ public class PrescriptionRepository : IPrescriptionRepository
     {
         var newPrescription = await _dbContext.Prescriptions.AddAsync(prescription);
         await _dbContext.SaveChangesAsync();
-        return newPrescription;
+        return newPrescription.Entity;
     }
 }
